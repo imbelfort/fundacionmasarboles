@@ -22,14 +22,23 @@ function initializeMap() {
         maxZoom: 20,
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     }).addTo(map);
+    
+    // Agregar capa de etiquetas de Google
+    L.tileLayer('https://mt1.google.com/vt/lyrs=h&x={x}&y={y}&z={z}', {
+        attribution: '© Google',
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    }).addTo(map);
 }
 
 // Inicializar event listeners
 function initializeEventListeners() {
     // Filtros
+    const searchInput = document.getElementById('search-input');
     const speciesFilter = document.getElementById('species-filter');
     const statusFilter = document.getElementById('status-filter');
     
+    if (searchInput) searchInput.addEventListener('input', applyFilters);
     if (speciesFilter) speciesFilter.addEventListener('change', applyFilters);
     if (statusFilter) statusFilter.addEventListener('change', applyFilters);
     
@@ -306,13 +315,22 @@ function updateFilters() {
 
 // Aplicar filtros
 function applyFilters() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
     const speciesFilter = document.getElementById('species-filter').value;
     const statusFilter = document.getElementById('status-filter').value;
     
     filteredTrees = allTrees.filter(tree => {
-        const matchesSpecies = !speciesFilter || tree.NOMBRE === speciesFilter;
-        const isSponsored = tree.PADRINO && tree.PADRINO.trim() !== '';
+        // Búsqueda por código o nombre
+        const matchesSearch = !searchTerm || 
+            tree.ID.toLowerCase().includes(searchTerm) ||
+            tree.NOMBRE.toLowerCase().includes(searchTerm) ||
+            tree.FAJA.toLowerCase().includes(searchTerm);
         
+        // Filtro por especie
+        const matchesSpecies = !speciesFilter || tree.NOMBRE === speciesFilter;
+        
+        // Filtro por estado
+        const isSponsored = tree.PADRINO && tree.PADRINO.trim() !== '';
         let matchesStatus = true;
         if (statusFilter === 'disponible') {
             matchesStatus = !isSponsored;
@@ -320,14 +338,21 @@ function applyFilters() {
             matchesStatus = isSponsored;
         }
         
-        return matchesSpecies && matchesStatus;
+        return matchesSearch && matchesSpecies && matchesStatus;
     });
     
     displayTreesOnMap();
+    
+    // Si hay búsqueda, centrar en el primer resultado
+    if (searchTerm && filteredTrees.length > 0) {
+        const firstTree = filteredTrees[0];
+        map.setView([parseFloat(firstTree.LATI), parseFloat(firstTree.LONG)], 18);
+    }
 }
 
 // Limpiar filtros
 function clearFilters() {
+    document.getElementById('search-input').value = '';
     document.getElementById('species-filter').value = '';
     document.getElementById('status-filter').value = '';
     filteredTrees = [...allTrees];

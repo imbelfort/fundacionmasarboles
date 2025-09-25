@@ -53,12 +53,18 @@ header h1 {
     gap: 10px;
 }
 
+.filters input,
 .filters select {
     padding: 8px 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
     background: white;
+}
+
+.filters input {
+    flex: 1;
+    min-width: 200px;
 }
 
 /* Mapa */
