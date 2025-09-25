@@ -208,7 +208,6 @@ function createTreePopup(tree) {
                 <p><strong>Número:</strong> ${tree.NRO}</p>
                 <p><strong>Capacidad:</strong> ${tree.CAP} cm</p>
                 <p><strong>Altura:</strong> ${tree.HT} m</p>
-                <p><strong>Ubicación:</strong> ${tree.Field || 'No especificada'}</p>
                 <p><strong>Estado:</strong> ${isSponsored ? '✅ Padrinado' : '🆓 Disponible'}</p>
                 ${isSponsored ? `<p><strong>Padrino:</strong> ${tree.PADRINO}</p>` : ''}
             </div>
