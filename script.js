@@ -16,10 +16,11 @@ function initializeMap() {
     // Crear el mapa centrado en las coordenadas de los datos reales (Bolivia)
     map = L.map('map').setView([-17.8045, -60.6285], 15); // Coordenadas aproximadas de los datos
     
-    // Agregar capa satelital
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: '© Esri, Maxar, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community',
-        maxZoom: 19
+    // Agregar capa satelital de Google
+    L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+        attribution: '© Google',
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     }).addTo(map);
 }
 
