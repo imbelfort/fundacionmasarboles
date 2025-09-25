@@ -207,9 +207,28 @@ function createTreeMarker(tree) {
 function createTreePopup(tree) {
     const isSponsored = tree.PADRINO && tree.PADRINO.trim() !== '';
     
+    // Generar nombre de imagen basado en el ID (reemplazar espacios con guiones)
+    const imageName = tree.ID.replace(/\s+/g, '-') + '.webp';
+    const imagePath = `imagen/${imageName}`;
+    
     return `
         <div class="custom-popup">
             <h3>🌳 ${tree.NOMBRE || 'Árbol'}</h3>
+            <div class="tree-image-container">
+                <img src="${imagePath}" 
+                     alt="Imagen del árbol ${tree.ID}" 
+                     class="tree-image" 
+                     onclick="openImageModal('${imagePath}', '${tree.ID}')"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="tree-image-placeholder" style="display: none;">
+                    <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="100" height="100" fill="#f0f0f0" stroke="#ddd" stroke-width="2"/>
+                        <path d="M30 40L50 20L70 40L80 30V80H20V30L30 40Z" fill="#4CAF50"/>
+                        <circle cx="50" cy="35" r="8" fill="#2E7D32"/>
+                        <text x="50" y="90" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">Sin imagen</text>
+                    </svg>
+                </div>
+            </div>
             <div class="tree-details">
                 <p><strong>ID:</strong> ${tree.ID}</p>
                 <p><strong>Especie:</strong> ${tree.NOMBRE}</p>
@@ -368,5 +387,36 @@ function clearMapMarkers() {
 }
 
 
+// Abrir modal de imagen ampliada
+function openImageModal(imagePath, treeId) {
+    const modal = document.createElement('div');
+    modal.className = 'image-modal';
+    modal.innerHTML = `
+        <div class="image-modal-content">
+            <span class="image-close">&times;</span>
+            <img src="${imagePath}" alt="Imagen ampliada del árbol ${treeId}" class="image-full">
+            <div class="image-caption">🌳 ${treeId}</div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    modal.style.display = 'block';
+    
+    // Cerrar modal al hacer clic en X o fuera de la imagen
+    modal.addEventListener('click', function(event) {
+        if (event.target === modal || event.target.classList.contains('image-close')) {
+            modal.remove();
+        }
+    });
+    
+    // Cerrar con tecla Escape
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            modal.remove();
+        }
+    });
+}
+
 // Exportar funciones globales para uso en HTML
 window.openSponsorModal = openSponsorModal;
+window.openImageModal = openImageModal;
