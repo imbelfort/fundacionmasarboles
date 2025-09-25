@@ -188,7 +188,7 @@ function createTreeMarker(tree) {
     
     // Crear círculo pequeño
     const circle = L.circleMarker([lat, lng], {
-        radius: 8,
+        radius: 6,
         fillColor: isSponsored ? '#FF9800' : '#4CAF50',
         color: '#fff',
         weight: 1,
