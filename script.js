@@ -28,34 +28,43 @@ function initializeMap() {
 // Inicializar event listeners
 function initializeEventListeners() {
     // Filtros
-    document.getElementById('species-filter').addEventListener('change', applyFilters);
-    document.getElementById('status-filter').addEventListener('change', applyFilters);
-    document.getElementById('clear-filters').addEventListener('click', clearFilters);
+    const speciesFilter = document.getElementById('species-filter');
+    const statusFilter = document.getElementById('status-filter');
+    const clearFiltersBtn = document.getElementById('clear-filters');
+    
+    if (speciesFilter) speciesFilter.addEventListener('change', applyFilters);
+    if (statusFilter) statusFilter.addEventListener('change', applyFilters);
+    if (clearFiltersBtn) clearFiltersBtn.addEventListener('click', clearFilters);
     
     // Modal
-    document.querySelector('.close').addEventListener('click', closeModal);
-    document.getElementById('cancel-sponsor').addEventListener('click', closeModal);
-    document.getElementById('sponsor-form').addEventListener('submit', handleSponsorSubmit);
+    const closeBtn = document.querySelector('.close');
+    const cancelBtn = document.getElementById('cancel-sponsor');
+    const sponsorForm = document.getElementById('sponsor-form');
+    
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+    if (sponsorForm) sponsorForm.addEventListener('submit', handleSponsorSubmit);
     
     // Cerrar modal al hacer clic fuera
     window.addEventListener('click', function(event) {
         const modal = document.getElementById('sponsor-modal');
-        if (event.target === modal) {
+        if (modal && event.target === modal) {
             closeModal();
         }
     });
 }
 
-// Configuración de Google Sheets
+// Configuración de archivos de datos
+const CSV_FILE_PATH = 'c.csv'; // Archivo CSV local
 const GOOGLE_SHEETS_URL = 'https://docs.google.com/spreadsheets/d/1aq7odEithSwbG-hzrpFR35im3Hsd-B82Z0SG6C3nnuU/export?format=csv&gid=0';
 
-// Cargar datos de árboles desde Google Sheets
+// Cargar datos de árboles desde archivo CSV local
 function loadTreeData() {
     // Mostrar mensaje de carga
     showLoadingMessage();
     
-    // Cargar desde Google Sheets
-    fetch(GOOGLE_SHEETS_URL)
+    // Intentar cargar desde archivo CSV local primero
+    fetch(CSV_FILE_PATH)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
@@ -63,20 +72,105 @@ function loadTreeData() {
             return response.text();
         })
         .then(csvData => {
+            console.log('Datos cargados desde archivo CSV local');
+            parseCSVData(csvData);
+        })
+        .catch(error => {
+            console.error('Error al cargar desde archivo CSV local:', error);
+            console.log('Intentando cargar desde Google Sheets...');
+            loadFromGoogleSheets();
+        });
+}
+
+// Función de respaldo para cargar desde Google Sheets
+function loadFromGoogleSheets() {
+    fetch(GOOGLE_SHEETS_URL, {
+        method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        headers: {
+            'Accept': 'text/csv',
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+            }
+            return response.text();
+        })
+        .then(csvData => {
+            console.log('Datos cargados desde Google Sheets');
             parseCSVData(csvData);
         })
         .catch(error => {
             console.error('Error al cargar desde Google Sheets:', error);
-            showDetailedErrorMessage(error);
+            console.log('Cargando datos de ejemplo...');
+            loadFallbackData();
         });
+}
+
+// Cargar datos de fallback si todas las fuentes fallan
+function loadFallbackData() {
+    // Datos de ejemplo para demostración
+    const fallbackData = `ID,NOMBRE,FAJA,NRO,CAP,HT,LATI,LONG,Field,OID_,PADRINO
+1,Eucalipto,A,1,25,8,-17.8045,-60.6285,Parque Central,1,
+2,Pino,B,2,30,10,-17.8050,-60.6290,Parque Central,2,
+3,Cedro,A,3,35,12,-17.8040,-60.6280,Parque Central,3,
+4,Roble,B,4,28,9,-17.8055,-60.6295,Parque Central,4,
+5,Acacia,A,5,32,11,-17.8035,-60.6275,Parque Central,5,`;
+    
+    parseCSVData(fallbackData);
+    
+    // Mostrar mensaje informativo
+    const filterPanel = document.querySelector('.filter-panel');
+    const infoDiv = document.createElement('div');
+    infoDiv.className = 'info-message';
+    infoDiv.innerHTML = `
+        <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 15px; margin-top: 10px;">
+            <h4 style="color: #856404; margin: 0 0 10px 0;">ℹ️ Usando datos de ejemplo</h4>
+            <p style="margin: 0; color: #856404;">
+                No se pudieron cargar los datos desde el archivo CSV ni Google Sheets. Se están mostrando datos de ejemplo para demostración.
+            </p>
+        </div>
+    `;
+    filterPanel.appendChild(infoDiv);
 }
 
 // Parsear datos CSV
 function parseCSVData(csvData) {
+    if (!csvData || csvData.trim() === '') {
+        console.error('Datos CSV vacíos o inválidos');
+        showDetailedErrorMessage(new Error('Datos CSV vacíos o inválidos'));
+        return;
+    }
+    
     Papa.parse(csvData, {
         header: true,
+        skipEmptyLines: true,
         complete: function(results) {
-            allTrees = results.data.filter(tree => tree.LATI && tree.LONG && tree.LATI.trim() !== '' && tree.LONG.trim() !== '');
+            if (!results.data || results.data.length === 0) {
+                console.error('No se encontraron datos válidos en el CSV');
+                showDetailedErrorMessage(new Error('No se encontraron datos válidos en el CSV'));
+                return;
+            }
+            
+            // Filtrar árboles con coordenadas válidas
+            allTrees = results.data.filter(tree => {
+                return tree && 
+                       tree.LATI && 
+                       tree.LONG && 
+                       tree.LATI.trim() !== '' && 
+                       tree.LONG.trim() !== '' &&
+                       !isNaN(parseFloat(tree.LATI)) && 
+                       !isNaN(parseFloat(tree.LONG));
+            });
+            
+            if (allTrees.length === 0) {
+                console.error('No se encontraron árboles con coordenadas válidas');
+                showDetailedErrorMessage(new Error('No se encontraron árboles con coordenadas válidas'));
+                return;
+            }
+            
             filteredTrees = [...allTrees];
             
             // Actualizar estadísticas
@@ -94,12 +188,11 @@ function parseCSVData(csvData) {
             // Ocultar mensaje de carga
             hideLoadingMessage();
             
-            console.log('Datos cargados:', allTrees.length, 'árboles');
+            console.log('Datos cargados exitosamente:', allTrees.length, 'árboles');
         },
         error: function(error) {
-            console.error('Error al parsear datos:', error);
-            alert('Error al procesar los datos de los árboles');
-            hideLoadingMessage();
+            console.error('Error al parsear datos CSV:', error);
+            showDetailedErrorMessage(new Error(`Error al parsear datos CSV: ${error.message}`));
         }
     });
 }
@@ -113,7 +206,7 @@ function showLoadingMessage() {
         <div style="background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; padding: 15px; margin-top: 10px;">
             <h4 style="color: #1976d2; margin: 0 0 10px 0;">🔄 Cargando datos...</h4>
             <p style="margin: 0; color: #1976d2;">
-                Conectando con Google Sheets para obtener los datos de los árboles.
+                Cargando datos de árboles desde el archivo CSV local.
             </p>
         </div>
     `;
@@ -128,9 +221,15 @@ function hideLoadingMessage() {
     }
 }
 
-// Mostrar mensaje de error detallado
+// Mostrar mensaje de error detallado (función mejorada)
 function showDetailedErrorMessage(error) {
     const filterPanel = document.querySelector('.filter-panel');
+    if (!filterPanel) return;
+    
+    // Limpiar mensajes anteriores
+    const existingError = filterPanel.querySelector('.error-message');
+    if (existingError) existingError.remove();
+    
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message';
     
@@ -146,6 +245,9 @@ function showDetailedErrorMessage(error) {
     } else if (error.message.includes('CORS')) {
         errorMessage = 'Error CORS: Política de seguridad';
         solutionMessage = 'Esto no debería pasar con Google Sheets públicos';
+    } else if (error.message.includes('400')) {
+        errorMessage = 'Error 400: Solicitud incorrecta';
+        solutionMessage = 'La URL de Google Sheets puede estar mal formada o la hoja no está configurada correctamente';
     } else {
         errorMessage = 'Error de conexión';
         solutionMessage = 'Verifica tu conexión a internet y que la hoja sea pública';
@@ -170,6 +272,12 @@ function showDetailedErrorMessage(error) {
                     <li>Haz clic en "Listo"</li>
                 </ol>
             </div>
+            <div style="margin-top: 10px;">
+                <button onclick="loadFallbackData(); this.parentElement.parentElement.parentElement.remove();" 
+                        style="background: #4CAF50; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+                    Usar datos de ejemplo
+                </button>
+            </div>
         </div>
     `;
     filterPanel.appendChild(errorDiv);
@@ -184,12 +292,14 @@ function displayTreesOnMap() {
     
     filteredTrees.forEach(tree => {
         const marker = createTreeMarker(tree);
-        treeMarkers.push(marker);
-        marker.addTo(map);
+        if (marker) {
+            treeMarkers.push(marker);
+            marker.addTo(map);
+        }
     });
     
     // Ajustar vista del mapa para mostrar todos los marcadores
-    if (filteredTrees.length > 0) {
+    if (treeMarkers.length > 0) {
         const group = new L.featureGroup(treeMarkers);
         map.fitBounds(group.getBounds().pad(0.1));
     }
@@ -197,6 +307,19 @@ function displayTreesOnMap() {
 
 // Crear marcador para un árbol
 function createTreeMarker(tree) {
+    if (!tree || !tree.LATI || !tree.LONG) {
+        console.warn('Árbol sin coordenadas válidas:', tree);
+        return null;
+    }
+    
+    const lat = parseFloat(tree.LATI);
+    const lng = parseFloat(tree.LONG);
+    
+    if (isNaN(lat) || isNaN(lng)) {
+        console.warn('Coordenadas inválidas para el árbol:', tree);
+        return null;
+    }
+    
     const isSponsored = tree.PADRINO && tree.PADRINO.trim() !== '';
     
     // Crear icono personalizado
@@ -207,7 +330,7 @@ function createTreeMarker(tree) {
         iconAnchor: [10, 10]
     });
     
-    const marker = L.marker([parseFloat(tree.LATI), parseFloat(tree.LONG)], { icon });
+    const marker = L.marker([lat, lng], { icon });
     
     // Crear popup con información del árbol
     const popupContent = createTreePopup(tree);
