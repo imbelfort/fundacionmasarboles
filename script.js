@@ -188,7 +188,7 @@ function createTreeMarker(tree) {
     
     // Crear círculo pequeño
     const circle = L.circleMarker([lat, lng], {
-        radius: 4,
+        radius: 6,
         fillColor: isSponsored ? '#FF9800' : '#4CAF50',
         color: '#fff',
         weight: 1,
@@ -263,7 +263,7 @@ function openSponsorModal(treeOid) {
         <p><strong>Especie:</strong> ${tree.NOMBRE}</p>
         <p><strong>Faja:</strong> ${tree.FAJA}</p>
         <p><strong>Número:</strong> ${tree.NRO}</p>
-        <p><strong>Capacidad:</strong> ${tree.CAP} cm</p>
+        <p><strong>Tronco(cm):</strong> ${tree.CAP} cm</p>
         <p><strong>Altura:</strong> ${tree.HT} m</p>
         <p><strong>Ubicación:</strong> ${tree.Field || 'No especificada'}</p>
     `;
