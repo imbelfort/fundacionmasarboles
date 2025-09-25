@@ -1,0 +1,21 @@
+OID_,ID,FAJA,NRO,NOMBRE,CAP,HT,GlobalID,coord_X,coord_Y,PADRINO,LONG,LATI,Field
+1,ARB001,A,1,Eucalipto,25.5,12.3,GUID001,-58.3816,-34.6037,,,Parque Centenario
+2,ARB002,A,2,Pino,30.2,15.8,GUID002,-58.3800,-34.6040,Juan Pérez,-58.3800,-34.6040,Parque Centenario
+3,ARB003,B,3,Cedro,22.1,10.5,GUID003,-58.3820,-34.6020,,,Plaza San Martín
+4,ARB004,B,4,Roble,35.8,18.2,GUID004,-58.3790,-34.6050,Maria García,-58.3790,-34.6050,Plaza San Martín
+5,ARB005,C,5,Álamo,28.3,14.1,GUID005,-58.3830,-34.6010,,,Reserva Ecológica
+6,ARB006,C,6,Sauce,20.7,9.8,GUID006,-58.3780,-34.6060,Carlos López,-58.3780,-34.6060,Reserva Ecológica
+7,ARB007,D,7,Fresno,32.4,16.5,GUID007,-58.3840,-34.6000,,,Parque Lezama
+8,ARB008,D,8,Tilo,26.9,13.2,GUID008,-58.3770,-34.6070,Ana Martínez,-58.3770,-34.6070,Parque Lezama
+9,ARB009,E,9,Eucalipto,29.1,14.8,GUID009,-58.3850,-34.5990,,,Costanera Sur
+10,ARB010,E,10,Pino,33.6,17.3,GUID010,-58.3760,-34.6080,Pedro Rodríguez,-58.3760,-34.6080,Costanera Sur
+11,ARB011,A,11,Cedro,24.8,11.9,GUID011,-58.3860,-34.5980,,,Parque Centenario
+12,ARB012,A,12,Roble,31.2,15.6,GUID012,-58.3750,-34.6090,Laura Fernández,-58.3750,-34.6090,Parque Centenario
+13,ARB013,B,13,Álamo,27.5,13.7,GUID013,-58.3870,-34.5970,,,Plaza San Martín
+14,ARB014,B,14,Sauce,21.3,10.2,GUID014,-58.3740,-34.6100,Miguel Torres,-58.3740,-34.6100,Plaza San Martín
+15,ARB015,C,15,Fresno,34.7,18.9,GUID015,-58.3880,-34.5960,,,Reserva Ecológica
+16,ARB016,C,16,Tilo,25.4,12.6,GUID016,-58.3730,-34.6110,Carmen Ruiz,-58.3730,-34.6110,Reserva Ecológica
+17,ARB017,D,17,Eucalipto,30.8,15.4,GUID017,-58.3890,-34.5950,,,Parque Lezama
+18,ARB018,D,18,Pino,28.6,14.3,GUID018,-58.3720,-34.6120,Roberto Silva,-58.3720,-34.6120,Parque Lezama
+19,ARB019,E,19,Cedro,23.7,11.4,GUID019,-58.3900,-34.5940,,,Costanera Sur
+20,ARB020,E,20,Roble,36.1,19.1,GUID020,-58.3710,-34.6130,Isabel Morales,-58.3710,-34.6130,Costanera Sur

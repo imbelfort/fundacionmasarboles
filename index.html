@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Árboles - Fundación + Arboles</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- PapaParse -->
+    <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+    
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌳 Mapa de Árboles - Fundación</h1>
+            <p>Explora los árboles disponibles para padrinazgo</p>
+        </header>
+        
+        <div class="controls">
+            <div class="stats-panel">
+                <h3>Estadísticas</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-trees">0</span>
+                        <span class="stat-label">Total Árboles</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="sponsored-trees">0</span>
+                        <span class="stat-label">Con Padrino</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="available-trees">0</span>
+                        <span class="stat-label">Disponibles</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="filter-panel">
+                <h3>Filtros</h3>
+                <select id="species-filter">
+                    <option value="">Todas las especies</option>
+                </select>
+                <select id="status-filter">
+                    <option value="">Todos los estados</option>
+                    <option value="disponible">Disponible</option>
+                    <option value="padrinado">Padrinado</option>
+                </select>
+                <button id="clear-filters">Limpiar Filtros</button>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+            
+            <div class="charts-panel">
+                <div class="chart-container">
+                    <h3>Árboles por Especie</h3>
+                    <canvas id="species-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Estado de Padrinazgo</h3>
+                    <canvas id="status-chart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal" id="sponsor-modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Padrinar Árbol</h2>
+                <div id="tree-info"></div>
+                <form id="sponsor-form">
+                    <div class="form-group">
+                        <label for="sponsor-name">Nombre del Padrino:</label>
+                        <input type="text" id="sponsor-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sponsor-email">Email:</label>
+                        <input type="email" id="sponsor-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sponsor-message">Mensaje (opcional):</label>
+                        <textarea id="sponsor-message" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit">Confirmar Padrinazgo</button>
+                        <button type="button" id="cancel-sponsor">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Script principal -->
+    <script src="script.js"></script>
+</body>
+</html>
