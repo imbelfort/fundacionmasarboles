@@ -188,7 +188,7 @@ function createTreeMarker(tree) {
     
     // Crear círculo pequeño
     const circle = L.circleMarker([lat, lng], {
-        radius: 6,
+        radius: 8,
         fillColor: isSponsored ? '#FF9800' : '#4CAF50',
         color: '#fff',
         weight: 1,
@@ -234,9 +234,9 @@ function createTreePopup(tree) {
                 <p><strong>Especie:</strong> ${tree.NOMBRE}</p>
                 <p><strong>Faja:</strong> ${tree.FAJA}</p>
                 <p><strong>Número:</strong> ${tree.NRO}</p>
-                <p><strong>Capacidad:</strong> ${tree.CAP} cm</p>
+                <p><strong>Tronco(cm):</strong> ${tree.CAP} cm</p>
                 <p><strong>Altura:</strong> ${tree.HT} m</p>
-                <p><strong>Estado:</strong> ${isSponsored ? '✅ Padrinado' : '🆓 Disponible'}</p>
+                <p><strong>Estado:</strong> ${isSponsored ? '✅ Padrinado' : 'Sin Padrino'}</p>
                 ${isSponsored ? `<p><strong>Padrino:</strong> ${tree.PADRINO}</p>` : ''}
             </div>
             ${!isSponsored ? 
