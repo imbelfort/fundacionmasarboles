@@ -3,8 +3,6 @@ let map;
 let treeMarkers = [];
 let allTrees = [];
 let filteredTrees = [];
-let speciesChart;
-let statusChart;
 
 // Configuración inicial
 document.addEventListener('DOMContentLoaded', function() {
@@ -30,11 +28,9 @@ function initializeEventListeners() {
     // Filtros
     const speciesFilter = document.getElementById('species-filter');
     const statusFilter = document.getElementById('status-filter');
-    const clearFiltersBtn = document.getElementById('clear-filters');
     
     if (speciesFilter) speciesFilter.addEventListener('change', applyFilters);
     if (statusFilter) statusFilter.addEventListener('change', applyFilters);
-    if (clearFiltersBtn) clearFiltersBtn.addEventListener('click', clearFilters);
     
     // Modal
     const closeBtn = document.querySelector('.close');
@@ -97,7 +93,6 @@ function parseCSVData(csvData) {
             updateStatistics();
             updateFilters();
             displayTreesOnMap();
-            createCharts();
             hideLoadingMessage();
             
             console.log('Datos cargados:', allTrees.length, 'árboles');
@@ -111,7 +106,7 @@ function parseCSVData(csvData) {
 
 // Mostrar mensaje de carga
 function showLoadingMessage() {
-    const filterPanel = document.querySelector('.filter-panel');
+    const controls = document.querySelector('.controls');
     const loadingDiv = document.createElement('div');
     loadingDiv.id = 'loading-message';
     loadingDiv.innerHTML = `
@@ -120,7 +115,7 @@ function showLoadingMessage() {
             <p style="margin: 0; color: #1976d2;">Cargando datos de árboles desde c.csv</p>
         </div>
     `;
-    filterPanel.appendChild(loadingDiv);
+    controls.appendChild(loadingDiv);
 }
 
 // Ocultar mensaje de carga
@@ -131,7 +126,7 @@ function hideLoadingMessage() {
 
 // Mostrar mensaje de error simple
 function showErrorMessage(message) {
-    const filterPanel = document.querySelector('.filter-panel');
+    const controls = document.querySelector('.controls');
     const errorDiv = document.createElement('div');
     errorDiv.innerHTML = `
         <div style="background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 8px; padding: 15px; margin-top: 10px;">
@@ -139,7 +134,7 @@ function showErrorMessage(message) {
             <p style="margin: 0; color: #721c24;">${message}</p>
         </div>
     `;
-    filterPanel.appendChild(errorDiv);
+    controls.appendChild(errorDiv);
     hideLoadingMessage();
 }
 
@@ -181,21 +176,21 @@ function createTreeMarker(tree) {
     
     const isSponsored = tree.PADRINO && tree.PADRINO.trim() !== '';
     
-    // Crear icono personalizado
-    const icon = L.divIcon({
-        className: 'custom-marker',
-        html: `<div class="marker-icon ${isSponsored ? 'sponsored-tree-marker' : 'tree-marker'}"></div>`,
-        iconSize: [20, 20],
-        iconAnchor: [10, 10]
+    // Crear círculo pequeño
+    const circle = L.circleMarker([lat, lng], {
+        radius: 4,
+        fillColor: isSponsored ? '#FF9800' : '#4CAF50',
+        color: '#fff',
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
     });
-    
-    const marker = L.marker([lat, lng], { icon });
     
     // Crear popup con información del árbol
     const popupContent = createTreePopup(tree);
-    marker.bindPopup(popupContent);
+    circle.bindPopup(popupContent);
     
-    return marker;
+    return circle;
 }
 
 // Crear contenido del popup
@@ -275,7 +270,6 @@ function handleSponsorSubmit(event) {
         // Actualizar datos
         updateStatistics();
         displayTreesOnMap();
-        createCharts();
         
         alert(`¡Gracias ${sponsorName}! Has padrinado el árbol ${tree.NOMBRE} exitosamente.`);
         closeModal();
@@ -348,102 +342,6 @@ function clearMapMarkers() {
     treeMarkers = [];
 }
 
-// Crear gráficos
-function createCharts() {
-    createSpeciesChart();
-    createStatusChart();
-}
-
-// Gráfico de especies
-function createSpeciesChart() {
-    const ctx = document.getElementById('species-chart').getContext('2d');
-    
-    // Destruir gráfico existente
-    if (speciesChart) {
-        speciesChart.destroy();
-    }
-    
-    const speciesCount = {};
-    allTrees.forEach(tree => {
-        const species = tree.NOMBRE || 'Sin nombre';
-        speciesCount[species] = (speciesCount[species] || 0) + 1;
-    });
-    
-    const labels = Object.keys(speciesCount);
-    const data = Object.values(speciesCount);
-    
-    speciesChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: data,
-                backgroundColor: [
-                    '#4CAF50', '#2196F3', '#FF9800', '#9C27B0',
-                    '#F44336', '#00BCD4', '#8BC34A', '#FFC107'
-                ],
-                borderWidth: 2,
-                borderColor: '#fff'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 10,
-                        font: {
-                            size: 10
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-// Gráfico de estado
-function createStatusChart() {
-    const ctx = document.getElementById('status-chart').getContext('2d');
-    
-    // Destruir gráfico existente
-    if (statusChart) {
-        statusChart.destroy();
-    }
-    
-    const sponsoredCount = allTrees.filter(tree => tree.PADRINO && tree.PADRINO.trim() !== '').length;
-    const availableCount = allTrees.length - sponsoredCount;
-    
-    statusChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Disponibles', 'Padrinados'],
-            datasets: [{
-                data: [availableCount, sponsoredCount],
-                backgroundColor: ['#4CAF50', '#FF9800'],
-                borderWidth: 2,
-                borderColor: '#fff'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 10,
-                        font: {
-                            size: 10
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
 
 // Exportar funciones globales para uso en HTML
 window.openSponsorModal = openSponsorModal;
