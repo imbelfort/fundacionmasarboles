@@ -89,8 +89,6 @@ function parseCSVData(csvData) {
             displayTreesOnMap();
             hideLoadingMessage();
             
-            console.log('Datos cargados:', allTrees.length, 'árboles');
-            console.log('Verificando contenedor de estadísticas:', document.getElementById('species-statistics'));
         },
         error: function(error) {
             console.error('Error al parsear CSV:', error);
@@ -157,7 +155,6 @@ function displayTreesOnMap() {
 // Crear marcador para un árbol
 function createTreeMarker(tree) {
     if (!tree || !tree.LATI || !tree.LONG) {
-        console.warn('Árbol sin coordenadas válidas:', tree);
         return null;
     }
     
@@ -165,7 +162,6 @@ function createTreeMarker(tree) {
     const lng = parseFloat(tree.LONG);
     
     if (isNaN(lat) || isNaN(lng)) {
-        console.warn('Coordenadas inválidas para el árbol:', tree);
         return null;
     }
     
@@ -356,7 +352,6 @@ function updateSpeciesStatistics() {
         return;
     }
     
-    console.log('Actualizando estadísticas de especies, total de árboles:', allTrees.length);
     
     // Contar árboles por especie
     const speciesCount = {};
@@ -365,7 +360,6 @@ function updateSpeciesStatistics() {
         speciesCount[species] = (speciesCount[species] || 0) + 1;
     });
     
-    console.log('Conteo de especies:', speciesCount);
     
     // Ordenar especies por cantidad (descendente)
     const sortedSpecies = Object.entries(speciesCount)
@@ -387,7 +381,6 @@ function updateSpeciesStatistics() {
         `;
     });
     
-    console.log('HTML generado para estadísticas:', speciesHTML);
     speciesContainer.innerHTML = speciesHTML;
 }
 
