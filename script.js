@@ -42,22 +42,6 @@ function initializeEventListeners() {
     if (speciesFilter) speciesFilter.addEventListener('change', applyFilters);
     if (statusFilter) statusFilter.addEventListener('change', applyFilters);
     
-    // Modal
-    const closeBtn = document.querySelector('.close');
-    const cancelBtn = document.getElementById('cancel-sponsor');
-    const sponsorForm = document.getElementById('sponsor-form');
-    
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
-    if (sponsorForm) sponsorForm.addEventListener('submit', handleSponsorSubmit);
-    
-    // Cerrar modal al hacer clic fuera
-    window.addEventListener('click', function(event) {
-        const modal = document.getElementById('sponsor-modal');
-        if (modal && event.target === modal) {
-            closeModal();
-        }
-    });
 }
 
 // Cargar datos de árboles desde archivo CSV local
@@ -106,6 +90,7 @@ function parseCSVData(csvData) {
             hideLoadingMessage();
             
             console.log('Datos cargados:', allTrees.length, 'árboles');
+            console.log('Verificando contenedor de estadísticas:', document.getElementById('species-statistics'));
         },
         error: function(error) {
             console.error('Error al parsear CSV:', error);
@@ -252,60 +237,6 @@ function createTreePopup(tree) {
     `;
 }
 
-// Abrir modal de padrinazgo
-function openSponsorModal(treeOid) {
-    const tree = allTrees.find(t => t.OID_ === treeOid);
-    if (!tree) return;
-    
-    const modal = document.getElementById('sponsor-modal');
-    const treeInfo = document.getElementById('tree-info');
-    
-    treeInfo.innerHTML = `
-        <h4>🌳 ${tree.NOMBRE}</h4>
-        <p><strong>ID:</strong> ${tree.ID}</p>
-        <p><strong>Especie:</strong> ${tree.NOMBRE}</p>
-        <p><strong>Faja:</strong> ${tree.FAJA}</p>
-        <p><strong>Número:</strong> ${tree.NRO}</p>
-        <p><strong>Tronco(cm):</strong> ${tree.CAP} cm</p>
-        <p><strong>Altura:</strong> ${tree.HT} m</p>
-        <p><strong>Ubicación:</strong> ${tree.Field || 'No especificada'}</p>
-    `;
-    
-    // Guardar OID del árbol para el formulario
-    document.getElementById('sponsor-form').dataset.treeOid = treeOid;
-    
-    modal.style.display = 'block';
-}
-
-// Cerrar modal
-function closeModal() {
-    document.getElementById('sponsor-modal').style.display = 'none';
-    document.getElementById('sponsor-form').reset();
-}
-
-// Manejar envío del formulario de padrinazgo
-function handleSponsorSubmit(event) {
-    event.preventDefault();
-    
-    const form = event.target;
-    const treeOid = form.dataset.treeOid;
-    const sponsorName = document.getElementById('sponsor-name').value;
-    const sponsorEmail = document.getElementById('sponsor-email').value;
-    const sponsorMessage = document.getElementById('sponsor-message').value;
-    
-    // Simular guardado (en producción esto se enviaría al servidor)
-    const tree = allTrees.find(t => t.OID_ === treeOid);
-    if (tree) {
-        tree.PADRINO = sponsorName;
-        
-        // Actualizar datos
-        updateStatistics();
-        displayTreesOnMap();
-        
-        alert(`¡Gracias ${sponsorName}! Has padrinado el árbol ${tree.NOMBRE} exitosamente.`);
-        closeModal();
-    }
-}
 
 // Actualizar estadísticas
 function updateStatistics() {
@@ -426,7 +357,12 @@ function openImageModal(imagePath, treeId) {
 // Actualizar estadísticas de especies
 function updateSpeciesStatistics() {
     const speciesContainer = document.getElementById('species-statistics');
-    if (!speciesContainer) return;
+    if (!speciesContainer) {
+        console.error('No se encontró el contenedor de estadísticas de especies');
+        return;
+    }
+    
+    console.log('Actualizando estadísticas de especies, total de árboles:', allTrees.length);
     
     // Contar árboles por especie
     const speciesCount = {};
@@ -434,6 +370,8 @@ function updateSpeciesStatistics() {
         const species = tree.NOMBRE || 'Sin nombre';
         speciesCount[species] = (speciesCount[species] || 0) + 1;
     });
+    
+    console.log('Conteo de especies:', speciesCount);
     
     // Ordenar especies por cantidad (descendente)
     const sortedSpecies = Object.entries(speciesCount)
@@ -455,9 +393,9 @@ function updateSpeciesStatistics() {
         `;
     });
     
+    console.log('HTML generado para estadísticas:', speciesHTML);
     speciesContainer.innerHTML = speciesHTML;
 }
 
 // Exportar funciones globales para uso en HTML
-window.openSponsorModal = openSponsorModal;
 window.openImageModal = openImageModal;
