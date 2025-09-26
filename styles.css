@@ -133,25 +133,6 @@ header h1 {
     color: #2c5530;
 }
 
-.sponsor-button {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-}
-
-.sponsor-button:hover {
-    background: #45a049;
-}
-
-.sponsor-button:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-}
 
 /* Modal de imagen ampliada */
 .image-modal {

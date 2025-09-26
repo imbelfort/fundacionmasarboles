@@ -224,15 +224,9 @@ function createTreePopup(tree) {
                 <p><strong>Estado:</strong> ${isSponsored ? '✅ Padrinado' : 'Sin Padrino'}</p>
                 ${isSponsored ? `<p><strong>Padrino:</strong> ${tree.PADRINO}</p>` : ''}
             </div>
-            ${!isSponsored ? 
-                `<button class="sponsor-button" style="background: #9E9E9E; cursor: not-allowed;" disabled>
-                    🔄 Próximamente
-                </button>
-                <p style="color: #666; font-size: 12px; margin-top: 5px; font-style: italic;">
-                    La funcionalidad de padrinazgo se implementará próximamente
-                </p>` : 
-                '<p style="color: #FF9800; font-weight: bold;">Este árbol ya tiene padrino</p>'
-            }
+             <p style="color: #666; font-size: 12px; margin-top: 10px; font-style: italic; text-align: center;">
+                 🔄 Funcionalidad de padrinazgo próximamente
+             </p>
         </div>
     `;
 }
