@@ -29,6 +29,7 @@ header h1 {
     font-size: 2rem;
     color: #2c5530;
     font-weight: 300;
+    margin-bottom: 15px;
 }
 
 /* Controles */
@@ -286,6 +287,103 @@ header h1 {
     font-weight: bold;
 }
 
+/* Información del Censo */
+.census-info {
+    margin-top: 0;
+    padding: 0;
+    background: transparent;
+}
+
+.census-details {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.census-details p {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+.census-details strong {
+    color: #2c5530;
+    font-weight: 500;
+}
+
+/* Estadísticas de Especies */
+.species-stats {
+    margin-top: 20px;
+    padding: 0;
+    background: transparent;
+}
+
+.species-stats h2 {
+    color: #2c5530;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 400;
+}
+
+.species-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.species-card {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    text-align: center;
+    transition: border-color 0.2s ease;
+}
+
+.species-card:hover {
+    border-color: #4CAF50;
+}
+
+.species-card h3 {
+    color: #2c5530;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.species-count {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #4CAF50;
+    margin-bottom: 3px;
+}
+
+.species-percentage {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.species-bar {
+    width: 100%;
+    height: 4px;
+    background: #f0f0f0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.species-bar-fill {
+    height: 100%;
+    background: #4CAF50;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .container {
@@ -322,5 +420,20 @@ header h1 {
     
     .image-full {
         max-height: 70vh;
+    }
+    
+    .census-details {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    
+    .species-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+    }
+    
+    .species-stats {
+        margin-top: 15px;
     }
 }

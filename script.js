@@ -240,9 +240,12 @@ function createTreePopup(tree) {
                 ${isSponsored ? `<p><strong>Padrino:</strong> ${tree.PADRINO}</p>` : ''}
             </div>
             ${!isSponsored ? 
-                `<button class="sponsor-button" onclick="openSponsorModal('${tree.OID_}')">
-                    Padrinar este árbol
-                </button>` : 
+                `<button class="sponsor-button" style="background: #9E9E9E; cursor: not-allowed;" disabled>
+                    🔄 Próximamente
+                </button>
+                <p style="color: #666; font-size: 12px; margin-top: 5px; font-style: italic;">
+                    La funcionalidad de padrinazgo se implementará próximamente
+                </p>` : 
                 '<p style="color: #FF9800; font-weight: bold;">Este árbol ya tiene padrino</p>'
             }
         </div>
@@ -313,6 +316,9 @@ function updateStatistics() {
     document.getElementById('total-trees').textContent = totalTrees;
     document.getElementById('sponsored-trees').textContent = sponsoredTrees;
     document.getElementById('available-trees').textContent = availableTrees;
+    
+    // Actualizar estadísticas de especies
+    updateSpeciesStatistics();
 }
 
 // Actualizar filtros
@@ -415,6 +421,41 @@ function openImageModal(imagePath, treeId) {
             modal.remove();
         }
     });
+}
+
+// Actualizar estadísticas de especies
+function updateSpeciesStatistics() {
+    const speciesContainer = document.getElementById('species-statistics');
+    if (!speciesContainer) return;
+    
+    // Contar árboles por especie
+    const speciesCount = {};
+    allTrees.forEach(tree => {
+        const species = tree.NOMBRE || 'Sin nombre';
+        speciesCount[species] = (speciesCount[species] || 0) + 1;
+    });
+    
+    // Ordenar especies por cantidad (descendente)
+    const sortedSpecies = Object.entries(speciesCount)
+        .sort(([,a], [,b]) => b - a);
+    
+    // Generar HTML para las estadísticas
+    let speciesHTML = '';
+    sortedSpecies.forEach(([species, count]) => {
+        const percentage = ((count / allTrees.length) * 100).toFixed(1);
+        speciesHTML += `
+            <div class="species-card">
+                <h3>🌳 ${species}</h3>
+                <div class="species-count">${count} árboles</div>
+                <div class="species-percentage">${percentage}% del total</div>
+                <div class="species-bar">
+                    <div class="species-bar-fill" style="width: ${percentage}%"></div>
+                </div>
+            </div>
+        `;
+    });
+    
+    speciesContainer.innerHTML = speciesHTML;
 }
 
 // Exportar funciones globales para uso en HTML
