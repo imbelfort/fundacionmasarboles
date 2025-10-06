@@ -301,10 +301,10 @@ header h1 {
     position: relative;
     background: white;
     margin: 20px auto;
-    padding: 30px;
+    padding: 25px;
     width: 90%;
-    max-width: 900px;
-    max-height: 90vh;
+    max-width: 800px;
+    max-height: 85vh;
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     animation: modalSlideIn 0.3s ease-out;
@@ -346,20 +346,29 @@ header h1 {
 
 .sponsor-header h2 {
     color: #2c5530;
-    margin-bottom: 10px;
-    font-size: 1.5rem;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
 }
 
-.sponsor-header p {
-    margin: 5px 0;
-    color: #666;
+.tree-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.tree-info p {
+    margin: 8px 0;
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 500;
 }
 
 .sponsor-content-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    margin-top: 20px;
+    gap: 25px;
+    margin-top: 15px;
 }
 
 .sponsor-left-column {
@@ -370,21 +379,22 @@ header h1 {
 .sponsor-right-column {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
-.sponsor-qr-section {
+.qr-section {
     text-align: center;
-    padding: 20px;
+    padding: 15px;
     background: #f8f9fa;
     border-radius: 8px;
     flex: 1;
 }
 
-.sponsor-qr-section h3 {
+.qr-section h3 {
     color: #2c5530;
     margin-bottom: 15px;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    font-weight: 600;
 }
 
 .qr-container {
@@ -422,77 +432,95 @@ header h1 {
 
 .qr-instructions {
     color: #666;
-    font-size: 0.9rem;
+    font-size: 1rem;
     margin-top: 15px;
-    font-style: italic;
+    font-weight: 500;
 }
 
-.sponsor-payment-section {
-    padding: 20px;
+.payment-info-section {
+    padding: 15px;
     background: #e8f5e8;
     border-radius: 8px;
     border-left: 4px solid #4CAF50;
 }
 
-.sponsor-payment-section h3 {
+.payment-info-section h3 {
     color: #2c5530;
     margin-bottom: 15px;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    font-weight: 600;
 }
 
-.payment-info p {
-    margin: 8px 0;
-    color: #333;
+.payment-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.payment-info strong {
+.payment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #d4edda;
+}
+
+.payment-item:last-child {
+    border-bottom: none;
+}
+
+.payment-item .label {
+    font-weight: 600;
     color: #2c5530;
+    font-size: 1rem;
 }
 
-.sponsor-whatsapp-section {
+.payment-item .value {
+    font-weight: 700;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.whatsapp-section {
     text-align: center;
-    padding: 20px;
+    padding: 15px;
     background: #f0f8ff;
     border-radius: 8px;
     border-left: 4px solid #2196F3;
 }
 
-.sponsor-whatsapp-section h3 {
+.whatsapp-section h3 {
     color: #1976d2;
     margin-bottom: 15px;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.whatsapp-section p {
+    margin: 10px 0;
+    color: #333;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 .whatsapp-button {
     background: #25D366;
     color: white;
     border: none;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 500;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
     cursor: pointer;
     transition: background 0.2s ease;
-    margin-top: 10px;
+    margin-top: 15px;
+    min-width: 200px;
 }
 
 .whatsapp-button:hover {
     background: #1ea952;
 }
 
-.sponsor-note {
-    text-align: center;
-    padding: 15px;
-    background: #fff3cd;
-    border-radius: 6px;
-    border-left: 4px solid #ffc107;
-}
-
-.sponsor-note p {
-    margin: 0;
-    color: #856404;
-    font-size: 0.9rem;
-}
 
 /* Confirmación de WhatsApp */
 .whatsapp-confirmation {
@@ -628,18 +656,23 @@ header h1 {
     }
     
     .sponsor-header h2 {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
     }
     
-    .sponsor-qr-section h3,
-    .sponsor-payment-section h3,
-    .sponsor-whatsapp-section h3 {
-        font-size: 1.1rem;
+    .tree-info p {
+        font-size: 1rem;
+    }
+    
+    .qr-section h3,
+    .payment-info-section h3,
+    .whatsapp-section h3 {
+        font-size: 1.2rem;
     }
     
     .whatsapp-button {
-        padding: 10px 20px;
-        font-size: 14px;
+        padding: 12px 20px;
+        font-size: 1rem;
+        min-width: 180px;
     }
     
     .confirmation-content {

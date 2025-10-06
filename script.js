@@ -167,14 +167,14 @@ function createTreeMarker(tree) {
     
     const isSponsored = tree.PADRINO && tree.PADRINO.trim() !== '';
     
-    // Crear círculo pequeño
+    // Crear círculo más grande
     const circle = L.circleMarker([lat, lng], {
-        radius: 6,
-        fillColor: isSponsored ? '#FF9800' : '#4CAF50',
+        radius: 10,
+        fillColor: isSponsored ? '#FF5722' : '#4CAF50',
         color: '#fff',
-        weight: 1,
+        weight: 2,
         opacity: 1,
-        fillOpacity: 0.8
+        fillOpacity: 0.9
     });
     
     // Crear popup con información del árbol
@@ -400,46 +400,54 @@ function showSponsorQR(treeId, treeName) {
     modal.innerHTML = `
         <div class="sponsor-modal-content">
             <span class="sponsor-close">&times;</span>
+            
             <div class="sponsor-header">
                 <h2>🌳 Padrinar Árbol</h2>
-                <p><strong>ID:</strong> ${treeId}</p>
-                <p><strong>Especie:</strong> ${treeName}</p>
+                <div class="tree-info">
+                    <p><strong>Árbol:</strong> ${treeId}</p>
+                    <p><strong>Especie:</strong> ${treeName}</p>
+                </div>
             </div>
             
             <div class="sponsor-content-grid">
                 <div class="sponsor-left-column">
-                    <div class="sponsor-qr-section">
-                        <h3>📱 Escanea el QR para realizar el pago</h3>
+                    <div class="qr-section">
+                        <h3>📱 Código QR para Pagar</h3>
                         <div class="qr-container">
                             <div id="qr-code"></div>
                         </div>
                         <p class="qr-instructions">
-                            Escanea este código QR con tu aplicación de pagos móvil para realizar el pago de padrinazgo.
+                            Escanea el código QR con tu celular para pagar
                         </p>
                     </div>
                 </div>
                 
                 <div class="sponsor-right-column">
-                    <div class="sponsor-payment-section">
-                        <h3>💰 Información del Pago</h3>
-                        <div class="payment-info">
-                            <p><strong>Monto:</strong> 100 BOB</p>
-                            <p><strong>Concepto:</strong> Padrinazgo de árbol ${treeId}</p>
-                            <p><strong>Beneficiario:</strong> Fundación Más Árboles</p>
+                    <div class="payment-info-section">
+                        <h3>💰 Datos del Pago</h3>
+                        <div class="payment-details">
+                            <div class="payment-item">
+                                <span class="label">Monto:</span>
+                                <span class="value">100 BOB</span>
+                            </div>
+                            <div class="payment-item">
+                                <span class="label">Árbol:</span>
+                                <span class="value">${treeId}</span>
+                            </div>
+                            <div class="payment-item">
+                                <span class="label">Fundación:</span>
+                                <span class="value">Más Árboles</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="sponsor-whatsapp-section">
-                        <h3>📲 Enviar comprobante por WhatsApp</h3>
-                        <p>Después de realizar el pago, envía el comprobante por WhatsApp:</p>
+                    <div class="whatsapp-section">
+                        <h3>📲 Enviar Comprobante</h3>
+                        <p>Después de pagar, envía el comprobante por WhatsApp:</p>
                         <button onclick="sendToWhatsApp('${treeId}', '${treeName}')" 
                                 class="whatsapp-button">
-                            📱 Enviar comprobante por WhatsApp
+                            📱 Enviar por WhatsApp
                         </button>
-                    </div>
-                    
-                    <div class="sponsor-note">
-                        <p><strong>Nota:</strong> Una vez confirmado el pago, registraremos tu padrinazgo en nuestro sistema.</p>
                     </div>
                 </div>
             </div>
@@ -474,7 +482,7 @@ function generateStaticQR(treeId, treeName) {
     // Usar imagen QR estática del banco
     qrContainer.innerHTML = `
         <div class="qr-visual">
-            <img src="qr-banco.png" alt="Código QR del banco" class="qr-bank-image">
+            <img src="qr-banco.jpg" alt="Código QR del banco" class="qr-bank-image">
             <div class="qr-text">
                 <p><strong>Árbol:</strong> ${treeId}</p>
                 <p><strong>Monto:</strong> 100 BOB</p>
