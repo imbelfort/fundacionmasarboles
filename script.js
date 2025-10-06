@@ -439,7 +439,7 @@ function showSponsorQR(treeId, treeName) {
                             </div>
                             <div class="payment-item">
                                 <span class="label">Fundación:</span>
-                                <span class="value">Más Árboles</span>
+                                <span class="value">Más Árboles Bolivia</span>
                             </div>
                         </div>
                     </div>
