@@ -301,14 +301,14 @@ header h1 {
     position: relative;
     background: white;
     margin: 20px auto;
-    padding: 25px;
-    width: 90%;
-    max-width: 800px;
-    max-height: 85vh;
+    padding: 30px;
+    width: 95%;
+    max-width: 1000px;
+    max-height: 90vh;
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     animation: modalSlideIn 0.3s ease-out;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 @keyframes modalSlideIn {
@@ -344,10 +344,21 @@ header h1 {
     border-bottom: 2px solid #f0f0f0;
 }
 
+.logo-container {
+    margin-bottom: 15px;
+}
+
+.modal-logo {
+    height: 60px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+}
+
 .sponsor-header h2 {
     color: #2c5530;
     margin-bottom: 15px;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 600;
     text-align: center;
 }
@@ -360,7 +371,7 @@ header h1 {
 .tree-info p {
     margin: 8px 0;
     color: #333;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
 }
 
@@ -393,7 +404,7 @@ header h1 {
 .qr-section h3 {
     color: #2c5530;
     margin-bottom: 15px;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 600;
 }
 
@@ -432,7 +443,7 @@ header h1 {
 
 .qr-instructions {
     color: #666;
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin-top: 15px;
     font-weight: 500;
 }
@@ -447,7 +458,7 @@ header h1 {
 .payment-info-section h3 {
     color: #2c5530;
     margin-bottom: 15px;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 600;
 }
 
@@ -472,13 +483,13 @@ header h1 {
 .payment-item .label {
     font-weight: 600;
     color: #2c5530;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .payment-item .value {
     font-weight: 700;
     color: #333;
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .whatsapp-section {
@@ -492,14 +503,14 @@ header h1 {
 .whatsapp-section h3 {
     color: #1976d2;
     margin-bottom: 15px;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 600;
 }
 
 .whatsapp-section p {
     margin: 10px 0;
     color: #333;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 500;
 }
 
@@ -507,14 +518,14 @@ header h1 {
     background: #25D366;
     color: white;
     border: none;
-    padding: 15px 25px;
+    padding: 12px 20px;
     border-radius: 8px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s ease;
     margin-top: 15px;
-    min-width: 200px;
+    min-width: 180px;
 }
 
 .whatsapp-button:hover {
@@ -653,6 +664,11 @@ header h1 {
     .qr-bank-image {
         width: 150px;
         height: 150px;
+    }
+    
+    .modal-logo {
+        height: 50px;
+        max-width: 150px;
     }
     
     .sponsor-header h2 {

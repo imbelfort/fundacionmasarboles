@@ -402,6 +402,9 @@ function showSponsorQR(treeId, treeName) {
             <span class="sponsor-close">&times;</span>
             
             <div class="sponsor-header">
+                <div class="logo-container">
+                    <img src="logo.png" alt="Fundación + árboles Bolivia" class="modal-logo">
+                </div>
                 <h2>🌳 Padrinar Árbol</h2>
                 <div class="tree-info">
                     <p><strong>Árbol:</strong> ${treeId}</p>
@@ -513,6 +516,9 @@ function showWhatsAppConfirmation(treeId) {
     confirmation.className = 'whatsapp-confirmation';
     confirmation.innerHTML = `
         <div class="confirmation-content">
+            <div class="logo-container">
+                <img src="logo.png" alt="Fundación + árboles Bolivia" class="modal-logo">
+            </div>
             <h3>✅ ¡Perfecto!</h3>
             <p>Se ha abierto WhatsApp para enviar el comprobante del árbol <strong>${treeId}</strong>.</p>
             <p>Por favor incluye:</p>
