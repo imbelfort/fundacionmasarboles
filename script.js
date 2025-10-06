@@ -406,36 +406,42 @@ function showSponsorQR(treeId, treeName) {
                 <p><strong>Especie:</strong> ${treeName}</p>
             </div>
             
-            <div class="sponsor-qr-section">
-                <h3>📱 Escanea el QR para realizar el pago</h3>
-                <div class="qr-container">
-                    <div id="qr-code"></div>
+            <div class="sponsor-content-grid">
+                <div class="sponsor-left-column">
+                    <div class="sponsor-qr-section">
+                        <h3>📱 Escanea el QR para realizar el pago</h3>
+                        <div class="qr-container">
+                            <div id="qr-code"></div>
+                        </div>
+                        <p class="qr-instructions">
+                            Escanea este código QR con tu aplicación de pagos móvil para realizar el pago de padrinazgo.
+                        </p>
+                    </div>
                 </div>
-                <p class="qr-instructions">
-                    Escanea este código QR con tu aplicación de pagos móvil para realizar el pago de padrinazgo.
-                </p>
-            </div>
-            
-            <div class="sponsor-payment-section">
-                <h3>💰 Información del Pago</h3>
-                <div class="payment-info">
-                    <p><strong>Monto:</strong> $50 BOB</p>
-                    <p><strong>Concepto:</strong> Padrinazgo de árbol ${treeId}</p>
-                    <p><strong>Beneficiario:</strong> Fundación Más Árboles</p>
+                
+                <div class="sponsor-right-column">
+                    <div class="sponsor-payment-section">
+                        <h3>💰 Información del Pago</h3>
+                        <div class="payment-info">
+                            <p><strong>Monto:</strong> 100 BOB</p>
+                            <p><strong>Concepto:</strong> Padrinazgo de árbol ${treeId}</p>
+                            <p><strong>Beneficiario:</strong> Fundación Más Árboles</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sponsor-whatsapp-section">
+                        <h3>📲 Enviar comprobante por WhatsApp</h3>
+                        <p>Después de realizar el pago, envía el comprobante por WhatsApp:</p>
+                        <button onclick="sendToWhatsApp('${treeId}', '${treeName}')" 
+                                class="whatsapp-button">
+                            📱 Enviar comprobante por WhatsApp
+                        </button>
+                    </div>
+                    
+                    <div class="sponsor-note">
+                        <p><strong>Nota:</strong> Una vez confirmado el pago, registraremos tu padrinazgo en nuestro sistema.</p>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="sponsor-whatsapp-section">
-                <h3>📲 Enviar comprobante por WhatsApp</h3>
-                <p>Después de realizar el pago, envía el comprobante por WhatsApp:</p>
-                <button onclick="sendToWhatsApp('${treeId}', '${treeName}')" 
-                        class="whatsapp-button">
-                    📱 Enviar comprobante por WhatsApp
-                </button>
-            </div>
-            
-            <div class="sponsor-note">
-                <p><strong>Nota:</strong> Una vez confirmado el pago, registraremos tu padrinazgo en nuestro sistema.</p>
             </div>
         </div>
     `;

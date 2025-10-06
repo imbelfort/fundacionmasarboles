@@ -303,10 +303,12 @@ header h1 {
     margin: 20px auto;
     padding: 30px;
     width: 90%;
-    max-width: 600px;
+    max-width: 900px;
+    max-height: 90vh;
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     animation: modalSlideIn 0.3s ease-out;
+    overflow: hidden;
 }
 
 @keyframes modalSlideIn {
@@ -353,12 +355,30 @@ header h1 {
     color: #666;
 }
 
+.sponsor-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.sponsor-left-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.sponsor-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .sponsor-qr-section {
     text-align: center;
-    margin-bottom: 25px;
     padding: 20px;
     background: #f8f9fa;
     border-radius: 8px;
+    flex: 1;
 }
 
 .sponsor-qr-section h3 {
@@ -408,7 +428,6 @@ header h1 {
 }
 
 .sponsor-payment-section {
-    margin-bottom: 25px;
     padding: 20px;
     background: #e8f5e8;
     border-radius: 8px;
@@ -432,7 +451,6 @@ header h1 {
 
 .sponsor-whatsapp-section {
     text-align: center;
-    margin-bottom: 25px;
     padding: 20px;
     background: #f0f8ff;
     border-radius: 8px;
@@ -591,6 +609,17 @@ header h1 {
         margin: 10px auto;
         padding: 20px;
         width: 95%;
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+    
+    .sponsor-content-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .sponsor-right-column {
+        gap: 15px;
     }
     
     .qr-bank-image {
