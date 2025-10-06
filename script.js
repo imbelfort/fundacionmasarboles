@@ -220,9 +220,18 @@ function createTreePopup(tree) {
                 <p><strong>Estado:</strong> ${isSponsored ? '✅ Padrinado' : 'Sin Padrino'}</p>
                 ${isSponsored ? `<p><strong>Padrino:</strong> ${tree.PADRINO}</p>` : ''}
             </div>
-             <p style="color: #666; font-size: 12px; margin-top: 10px; font-style: italic; text-align: center;">
-                 🔄 Funcionalidad de padrinazgo próximamente
-             </p>
+            ${!isSponsored ? `
+                <div style="margin-top: 15px; text-align: center;">
+                    <button onclick="showSponsorQR('${tree.ID}', '${tree.NOMBRE}')" 
+                            style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+                        🌳 Padrinar este árbol
+                    </button>
+                </div>
+            ` : `
+                <div style="margin-top: 15px; text-align: center; color: #4CAF50; font-weight: bold;">
+                    ✅ Este árbol ya tiene padrino
+                </div>
+            `}
         </div>
     `;
 }
@@ -384,5 +393,132 @@ function updateSpeciesStatistics() {
     speciesContainer.innerHTML = speciesHTML;
 }
 
+// Mostrar QR estático para padrinazgo
+function showSponsorQR(treeId, treeName) {
+    const modal = document.createElement('div');
+    modal.className = 'sponsor-modal';
+    modal.innerHTML = `
+        <div class="sponsor-modal-content">
+            <span class="sponsor-close">&times;</span>
+            <div class="sponsor-header">
+                <h2>🌳 Padrinar Árbol</h2>
+                <p><strong>ID:</strong> ${treeId}</p>
+                <p><strong>Especie:</strong> ${treeName}</p>
+            </div>
+            
+            <div class="sponsor-qr-section">
+                <h3>📱 Escanea el QR para realizar el pago</h3>
+                <div class="qr-container">
+                    <div id="qr-code"></div>
+                </div>
+                <p class="qr-instructions">
+                    Escanea este código QR con tu aplicación de pagos móvil para realizar el pago de padrinazgo.
+                </p>
+            </div>
+            
+            <div class="sponsor-payment-section">
+                <h3>💰 Información del Pago</h3>
+                <div class="payment-info">
+                    <p><strong>Monto:</strong> $50 BOB</p>
+                    <p><strong>Concepto:</strong> Padrinazgo de árbol ${treeId}</p>
+                    <p><strong>Beneficiario:</strong> Fundación Más Árboles</p>
+                </div>
+            </div>
+            
+            <div class="sponsor-whatsapp-section">
+                <h3>📲 Enviar comprobante por WhatsApp</h3>
+                <p>Después de realizar el pago, envía el comprobante por WhatsApp:</p>
+                <button onclick="sendToWhatsApp('${treeId}', '${treeName}')" 
+                        class="whatsapp-button">
+                    📱 Enviar comprobante por WhatsApp
+                </button>
+            </div>
+            
+            <div class="sponsor-note">
+                <p><strong>Nota:</strong> Una vez confirmado el pago, registraremos tu padrinazgo en nuestro sistema.</p>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    modal.style.display = 'block';
+    
+    // Generar QR estático
+    generateStaticQR(treeId, treeName);
+    
+    // Cerrar modal
+    modal.addEventListener('click', function(event) {
+        if (event.target === modal || event.target.classList.contains('sponsor-close')) {
+            modal.remove();
+        }
+    });
+    
+    // Cerrar con tecla Escape
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            modal.remove();
+        }
+    });
+}
+
+// Mostrar QR estático del banco
+function generateStaticQR(treeId, treeName) {
+    const qrContainer = document.getElementById('qr-code');
+    
+    // Usar imagen QR estática del banco
+    qrContainer.innerHTML = `
+        <div class="qr-visual">
+            <img src="qr-banco.png" alt="Código QR del banco" class="qr-bank-image">
+            <div class="qr-text">
+                <p><strong>Árbol:</strong> ${treeId}</p>
+                <p><strong>Monto:</strong> $100 BOB</p>
+                <p><strong>Concepto:</strong> Padrinazgo árbol ${treeId}</p>
+            </div>
+        </div>
+    `;
+}
+
+
+// Enviar comprobante por WhatsApp
+function sendToWhatsApp(treeId, treeName) {
+    const phoneNumber = '59170123456'; // Reemplaza con tu número de WhatsApp
+    const message = `Hola! He realizado el pago para padrinar el árbol ${treeId} (${treeName}). Adjunto el comprobante de pago.`;
+    
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    
+    // Abrir WhatsApp en nueva ventana
+    window.open(whatsappUrl, '_blank');
+    
+    // Mostrar mensaje de confirmación
+    showWhatsAppConfirmation(treeId);
+}
+
+// Mostrar confirmación de WhatsApp
+function showWhatsAppConfirmation(treeId) {
+    const confirmation = document.createElement('div');
+    confirmation.className = 'whatsapp-confirmation';
+    confirmation.innerHTML = `
+        <div class="confirmation-content">
+            <h3>✅ ¡Perfecto!</h3>
+            <p>Se ha abierto WhatsApp para enviar el comprobante del árbol <strong>${treeId}</strong>.</p>
+            <p>Por favor incluye:</p>
+            <ul>
+                <li>Tu nombre completo</li>
+                <li>El comprobante de pago</li>
+                <li>El ID del árbol: <strong>${treeId}</strong></li>
+            </ul>
+            <p>Una vez recibido el comprobante, registraremos tu padrinazgo en nuestro sistema.</p>
+            <button onclick="this.parentElement.parentElement.remove()" class="close-confirmation">
+                Entendido
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(confirmation);
+    confirmation.style.display = 'block';
+}
+
 // Exportar funciones globales para uso en HTML
 window.openImageModal = openImageModal;
+window.showSponsorQR = showSponsorQR;
+window.sendToWhatsApp = sendToWhatsApp;

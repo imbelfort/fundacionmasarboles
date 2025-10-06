@@ -284,6 +284,261 @@ header h1 {
     transition: width 0.3s ease;
 }
 
+/* Modal de Padrinazgo */
+.sponsor-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    overflow-y: auto;
+}
+
+.sponsor-modal-content {
+    position: relative;
+    background: white;
+    margin: 20px auto;
+    padding: 30px;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sponsor-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #666;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.sponsor-close:hover {
+    color: #4CAF50;
+}
+
+.sponsor-header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.sponsor-header h2 {
+    color: #2c5530;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.sponsor-header p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.sponsor-qr-section {
+    text-align: center;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.sponsor-qr-section h3 {
+    color: #2c5530;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.qr-container {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.qr-visual {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.qr-bank-image {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    margin: 0 auto 15px;
+    display: block;
+    border: 2px solid #f0f0f0;
+    border-radius: 8px;
+}
+
+.qr-text {
+    text-align: center;
+    color: #666;
+}
+
+.qr-text p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.qr-instructions {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 15px;
+    font-style: italic;
+}
+
+.sponsor-payment-section {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: #e8f5e8;
+    border-radius: 8px;
+    border-left: 4px solid #4CAF50;
+}
+
+.sponsor-payment-section h3 {
+    color: #2c5530;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.payment-info p {
+    margin: 8px 0;
+    color: #333;
+}
+
+.payment-info strong {
+    color: #2c5530;
+}
+
+.sponsor-whatsapp-section {
+    text-align: center;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: #f0f8ff;
+    border-radius: 8px;
+    border-left: 4px solid #2196F3;
+}
+
+.sponsor-whatsapp-section h3 {
+    color: #1976d2;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.whatsapp-button {
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    margin-top: 10px;
+}
+
+.whatsapp-button:hover {
+    background: #1ea952;
+}
+
+.sponsor-note {
+    text-align: center;
+    padding: 15px;
+    background: #fff3cd;
+    border-radius: 6px;
+    border-left: 4px solid #ffc107;
+}
+
+.sponsor-note p {
+    margin: 0;
+    color: #856404;
+    font-size: 0.9rem;
+}
+
+/* Confirmación de WhatsApp */
+.whatsapp-confirmation {
+    position: fixed;
+    z-index: 3000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+}
+
+.confirmation-content {
+    position: relative;
+    background: white;
+    margin: 50px auto;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.confirmation-content h3 {
+    color: #4CAF50;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.confirmation-content p {
+    margin: 10px 0;
+    color: #666;
+    line-height: 1.6;
+}
+
+.confirmation-content ul {
+    text-align: left;
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.confirmation-content li {
+    margin: 8px 0;
+    color: #333;
+}
+
+.close-confirmation {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.2s ease;
+}
+
+.close-confirmation:hover {
+    background: #45a049;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .container {
@@ -330,5 +585,37 @@ header h1 {
     
     .species-stats {
         margin-top: 15px;
+    }
+    
+    .sponsor-modal-content {
+        margin: 10px auto;
+        padding: 20px;
+        width: 95%;
+    }
+    
+    .qr-bank-image {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .sponsor-header h2 {
+        font-size: 1.3rem;
+    }
+    
+    .sponsor-qr-section h3,
+    .sponsor-payment-section h3,
+    .sponsor-whatsapp-section h3 {
+        font-size: 1.1rem;
+    }
+    
+    .whatsapp-button {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    .confirmation-content {
+        margin: 20px auto;
+        padding: 20px;
+        width: 95%;
     }
 }
