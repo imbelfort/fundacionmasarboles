@@ -187,6 +187,58 @@ header h1 {
     font-weight: bold;
 }
 
+/* Información del Bosque Union Agronegocios */
+.union-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+    padding: 15px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.union-logo {
+    flex-shrink: 0;
+}
+
+.union-logo-img {
+    height: 50px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: transform 0.2s ease;
+}
+
+.union-logo-img:hover {
+    transform: scale(1.05);
+}
+
+.union-text {
+    text-align: center;
+}
+
+.union-text p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.union-text p:first-child {
+    margin-bottom: 5px;
+}
+
+.union-name {
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+    color: #2c5530 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
 /* Información del Censo */
 .census-info {
     margin-top: 0;
@@ -213,6 +265,52 @@ header h1 {
 .census-details strong {
     color: #2c5530;
     font-weight: 500;
+}
+
+/* Disclaimer */
+.disclaimer {
+    margin: 20px 0;
+    padding: 0;
+    background: transparent;
+}
+
+.disclaimer-content {
+    background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+    border-radius: 12px;
+    border: 1px solid #c3e6c3;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.disclaimer-content h3 {
+    color: #2c5530;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.disclaimer-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.disclaimer-items p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.5;
+    padding: 8px 0;
+}
+
+.disclaimer-items strong {
+    color: #2c5530;
+    font-weight: 600;
 }
 
 /* Estadísticas de Especies */
@@ -633,6 +731,34 @@ header h1 {
         flex-direction: column;
         gap: 8px;
         text-align: center;
+    }
+    
+    .union-info {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding: 12px;
+    }
+    
+    .union-logo-img {
+        height: 40px;
+        max-width: 150px;
+    }
+    
+    .union-name {
+        font-size: 1.1rem !important;
+    }
+    
+    .disclaimer-content {
+        padding: 15px;
+    }
+    
+    .disclaimer-content h3 {
+        font-size: 1.1rem;
+    }
+    
+    .disclaimer-items p {
+        font-size: 0.9rem;
     }
     
     .species-grid {
