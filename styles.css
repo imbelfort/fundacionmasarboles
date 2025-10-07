@@ -18,18 +18,63 @@ body {
     padding: 20px;
 }
 
-/* Header */
-header {
-    text-align: center;
-    margin-bottom: 20px;
-    padding: 20px 0;
+/* Header Principal con Logo de la Fundación */
+.main-header {
+    background: linear-gradient(135deg, #90EE90 0%, #98FB98 50%, #90EE90 100%);
+    padding: 25px 0;
+    margin-bottom: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-bottom: 3px solid #32CD32;
 }
 
-header h1 {
-    font-size: 2rem;
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+.fundacion-logo {
+    flex-shrink: 0;
+}
+
+.fundacion-logo-img {
+    height: 80px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.fundacion-logo-img:hover {
+    transform: scale(1.05);
+}
+
+.header-title {
+    text-align: center;
+    flex: 1;
+}
+
+.header-title h1 {
+    font-size: 2.5rem;
     color: #2c5530;
-    font-weight: 300;
-    margin-bottom: 15px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.5px;
+}
+
+.header-title h2 {
+    font-size: 1.3rem;
+    color: #228B22;
+    font-weight: 400;
+    margin: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-style: italic;
 }
 
 /* Controles */
@@ -709,8 +754,24 @@ header h1 {
         flex-wrap: wrap;
     }
     
-    header h1 {
-        font-size: 1.5rem;
+    .header-content {
+        flex-direction: column;
+        gap: 20px;
+        padding: 0 15px;
+    }
+    
+    .fundacion-logo-img {
+        height: 60px;
+        max-width: 150px;
+    }
+    
+    .header-title h1 {
+        font-size: 1.8rem;
+        margin-bottom: 5px;
+    }
+    
+    .header-title h2 {
+        font-size: 1.1rem;
     }
     
     #map {
