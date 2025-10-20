@@ -184,31 +184,74 @@ function createTreeMarker(tree) {
     return circle;
 }
 
+// Función auxiliar para generar rutas de imágenes
+function getTreeImages(treeId) {
+    const baseName = treeId.replace(/\s+/g, '-');
+    const images = [];
+    
+    // Primera imagen (sin número)
+    images.push({
+        path: `imagen/${baseName}.webp`,
+        alt: `Imagen del árbol ${treeId}`
+    });
+    
+    // Buscar imágenes adicionales (2, 3, etc.)
+    for (let i = 2; i <= 10; i++) {
+        images.push({
+            path: `imagen/${baseName} (${i}).webp`,
+            alt: `Imagen ${i} del árbol ${treeId}`
+        });
+    }
+    
+    return images;
+}
+
 // Crear contenido del popup
 function createTreePopup(tree) {
     const isSponsored = tree.PADRINO && tree.PADRINO.trim() !== '';
+    const images = getTreeImages(tree.ID);
     
-    // Generar nombre de imagen basado en el ID (reemplazar espacios con guiones)
-    const imageName = tree.ID.replace(/\s+/g, '-') + '.webp';
-    const imagePath = `imagen/${imageName}`;
+    // Generar miniaturas
+    const thumbnails = images.map((img, index) => `
+        <div class="gallery-thumbnail ${index === 0 ? 'active' : ''}" 
+             onclick="showGalleryImage(this, '${img.path}', '${tree.ID}')">
+            <img src="${img.path}" 
+                 alt="${img.alt}"
+                 onerror="this.parentNode.style.display='none';">
+        </div>
+    `).join('');
+    
+    const mainImage = images[0];
     
     return `
         <div class="custom-popup">
             <h3>🌳 ${tree.NOMBRE || 'Árbol'}</h3>
-            <div class="tree-image-container">
-                <img src="${imagePath}" 
-                     alt="Imagen del árbol ${tree.ID}" 
-                     class="tree-image" 
-                     onclick="openImageModal('${imagePath}', '${tree.ID}')"
-                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <div class="tree-image-placeholder" style="display: none;">
-                    <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="100" height="100" fill="#f0f0f0" stroke="#ddd" stroke-width="2"/>
-                        <path d="M30 40L50 20L70 40L80 30V80H20V30L30 40Z" fill="#4CAF50"/>
-                        <circle cx="50" cy="35" r="8" fill="#2E7D32"/>
-                        <text x="50" y="90" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">Sin imagen</text>
-                    </svg>
+            <div class="tree-gallery">
+                <div class="gallery-container">
+                    <img src="${mainImage.path}" 
+                         alt="${mainImage.alt}" 
+                         class="gallery-main-image"
+                         onclick="openImageModal('${mainImage.path}', '${tree.ID}')"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="gallery-placeholder" style="display: none;">
+                        <svg width="100%" height="150" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="100" height="100" fill="#f0f0f0" stroke="#ddd" stroke-width="2"/>
+                            <path d="M30 40L50 20L70 40L80 30V80H20V30L30 40Z" fill="#4CAF50"/>
+                            <circle cx="50" cy="35" r="8" fill="#2E7D32"/>
+                            <text x="50" y="90" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">Sin imagen</text>
+                        </svg>
+                    </div>
+                    ${images.length > 1 ? `
+                    <div class="gallery-nav">
+                        <button class="gallery-nav-btn prev" onclick="navigateGallery(this.closest('.tree-gallery'), -1)">❮</button>
+                        <button class="gallery-nav-btn next" onclick="navigateGallery(this.closest('.tree-gallery'), 1)">❯</button>
+                    </div>` : ''}
                 </div>
+                ${images.length > 1 ? `
+                <div class="gallery-thumbnails">
+                    ${thumbnails}
+                </div>` : ''}
+            </div>
             </div>
             <div class="tree-details">
                 <p><strong>ID:</strong> ${tree.ID}</p>
@@ -508,6 +551,42 @@ function sendToWhatsApp(treeId, treeName) {
     
     // Mostrar mensaje de confirmación
     showWhatsAppConfirmation(treeId);
+}
+
+// Mostrar una imagen específica en la galería
+function showGalleryImage(thumbnail, imagePath, treeId) {
+    const gallery = thumbnail.closest('.tree-gallery');
+    const mainImg = gallery.querySelector('.gallery-main-image');
+    const thumbnails = gallery.querySelectorAll('.gallery-thumbnail');
+    
+    // Actualizar la imagen principal
+    mainImg.src = imagePath;
+    mainImg.onclick = () => openImageModal(imagePath, treeId);
+    
+    // Actualizar miniaturas activas
+    thumbnails.forEach(thumb => {
+        thumb.classList.remove('active');
+        if (thumb === thumbnail) {
+            thumb.classList.add('active');
+        }
+    });
+}
+
+// Navegar entre imágenes de la galería
+function navigateGallery(gallery, direction) {
+    const thumbnails = Array.from(gallery.querySelectorAll('.gallery-thumbnail:not([style*="display: none"])'));
+    const currentIndex = thumbnails.findIndex(thumb => thumb.classList.contains('active'));
+    
+    if (currentIndex === -1) return;
+    
+    let newIndex = currentIndex + direction;
+    if (newIndex < 0) newIndex = thumbnails.length - 1;
+    if (newIndex >= thumbnails.length) newIndex = 0;
+    
+    const newThumb = thumbnails[newIndex];
+    const newImagePath = newThumb.querySelector('img').src;
+    
+    showGalleryImage(newThumb, newImagePath, '');
 }
 
 // Mostrar confirmación de WhatsApp
