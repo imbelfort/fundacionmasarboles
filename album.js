@@ -25,11 +25,14 @@ function mapImagesToTrees(trees, imageFiles) {
     
     imageFiles.forEach(filename => {
         if (filename.match(/\.(webp|jpg|jpeg|png)$/i)) {
+            // Extraer el ID base del nombre del archivo (sin números entre paréntesis)
             const baseId = extractBaseId(filename);
             if (!imagesByTreeId[baseId]) {
                 imagesByTreeId[baseId] = [];
             }
-            imagesByTreeId[baseId].push(`imagen/${filename}`);
+            // Asegurarse de que la ruta sea correcta (sin duplicar 'imagen/' si ya está en el filename)
+            const imagePath = filename.startsWith('imagen/') ? filename : `imagen/${filename}`;
+            imagesByTreeId[baseId].push(imagePath);
         }
     });
     
@@ -37,8 +40,14 @@ function mapImagesToTrees(trees, imageFiles) {
     return trees.map(tree => {
         if (!tree || !tree.ID) return null;
         
+        // Intentar coincidir con y sin guiones
         const baseId = tree.ID.trim();
-        tree.images = imagesByTreeId[baseId] || [];
+        const baseIdWithDashes = baseId.replace(/([A-Za-z])(\d)/, '$1-$2'); // Convertir F11 a F1-1
+        
+        // Buscar en ambos formatos (con y sin guiones)
+        tree.images = imagesByTreeId[baseId] || 
+                     imagesByTreeId[baseIdWithDashes] || 
+                     [];
         
         return tree;
     }).filter(Boolean); // Eliminar árboles nulos
