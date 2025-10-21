@@ -274,12 +274,12 @@ function applyFilters() {
     const speciesFilter = document.getElementById('species-filter').value;
     const statusFilter = document.getElementById('status-filter').value;
     
-    // Normalizar el término de búsqueda: reemplazar guiones con espacios
-    const normalizedSearchTerm = searchTerm.replace(/-/g, ' ');
+    // Normalizar el término de búsqueda: eliminar guiones y convertir a minúsculas
+    const normalizedSearchTerm = searchTerm.replace(/-/g, '').toLowerCase();
     
     filteredTrees = allTrees.filter(tree => {
-        // Búsqueda por código o nombre
-        const normalizedTreeId = tree.ID.replace(/-/g, ' ').toLowerCase();
+        // Normalizar el ID del árbol: eliminar guiones, espacios y convertir a minúsculas
+        const normalizedTreeId = tree.ID.replace(/[\s-]/g, '').toLowerCase();
         const matchesSearch = !searchTerm || 
             normalizedTreeId.includes(normalizedSearchTerm) ||
             tree.ID.toLowerCase().includes(searchTerm) ||
