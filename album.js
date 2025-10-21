@@ -10,51 +10,96 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
 });
 
+// Función para extraer el ID base de un nombre de archivo
+function extractBaseId(filename) {
+    // Eliminar la extensión del archivo
+    const withoutExt = filename.replace(/\.[^/.]+$/, '');
+    // Eliminar los números entre paréntesis al final (como (2), (3), etc.)
+    return withoutExt.replace(/\s*\(\d+\)$/, '');
+}
+
+// Mapear imágenes a sus árboles correspondientes
+function mapImagesToTrees(trees, imageFiles) {
+    // Primero, agrupar imágenes por su ID base
+    const imagesByTreeId = {};
+    
+    imageFiles.forEach(filename => {
+        if (filename.match(/\.(webp|jpg|jpeg|png)$/i)) {
+            const baseId = extractBaseId(filename);
+            if (!imagesByTreeId[baseId]) {
+                imagesByTreeId[baseId] = [];
+            }
+            imagesByTreeId[baseId].push(`imagen/${filename}`);
+        }
+    });
+    
+    // Luego, asignar las imágenes a los árboles correspondientes
+    return trees.map(tree => {
+        if (!tree || !tree.ID) return null;
+        
+        const baseId = tree.ID.trim();
+        tree.images = imagesByTreeId[baseId] || [];
+        
+        return tree;
+    }).filter(Boolean); // Eliminar árboles nulos
+}
+
 // Cargar datos de árboles
 function loadTreeData() {
+    // Primero cargar el CSV
     fetch('c.csv')
         .then(response => {
             if (!response.ok) throw new Error(`Error al cargar CSV: ${response.status}`);
             return response.text();
         })
         .then(csvData => {
-            parseCSVData(csvData);
+            // Parsear el CSV
+            Papa.parse(csvData, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    const trees = results.data.filter(tree => tree && tree.ID && tree.ID.trim() !== '');
+                    
+                    // Obtener la lista de imágenes de la carpeta 'imagen'
+                    // Nota: Esto requiere que el servidor tenga permisos para listar archivos
+                    // o que uses un endpoint que devuelva la lista de imágenes
+                    fetch('list-images.php')
+                        .then(response => response.json())
+                        .then(imageFiles => {
+                            // Mapear imágenes a árboles
+                            allTrees = mapImagesToTrees(trees, imageFiles);
+                            filteredTrees = [...allTrees];
+                            
+                            updateAlbumGrid();
+                            updateSpeciesFilter();
+                        })
+                        .catch(error => {
+                            console.error('Error al cargar imágenes:', error);
+                            // Si falla, mostrar un mensaje pero continuar sin imágenes
+                            allTrees = trees.map(tree => {
+                                tree.images = [];
+                                return tree;
+                            });
+                            filteredTrees = [...allTrees];
+                            updateAlbumGrid();
+                            updateSpeciesFilter();
+                        });
+                },
+                error: function(error) {
+                    console.error('Error al parsear CSV:', error);
+                    showErrorMessage('Error al procesar los datos del archivo CSV.');
+                }
+                },
+                error: function(error) {
+                    console.error('Error al parsear CSV:', error);
+                    showErrorMessage('Error al procesar los datos del archivo CSV.');
+                }
+            });
         })
         .catch(error => {
             console.error('Error al cargar datos:', error);
             showErrorMessage('No se pudieron cargar los datos de los árboles.');
         });
-}
-
-// Parsear datos CSV
-function parseCSVData(csvData) {
-    Papa.parse(csvData, {
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-            allTrees = results.data
-                .filter(tree => tree && tree.ID && tree.ID.trim() !== '')
-                .map(tree => {
-                    // Generar URLs de imágenes de ejemplo (ajustar según tu estructura real)
-                    const baseId = tree.ID.replace(/[\s-]/g, '').toLowerCase();
-                    tree.images = [
-                        `images/arboles/${baseId}_1.jpg`,
-                        `images/arboles/${baseId}_2.jpg`,
-                        `images/arboles/${baseId}_3.jpg`
-                    ].filter((_, index) => index < 3); // Máximo 3 imágenes por árbol
-                    
-                    return tree;
-                });
-            
-            filteredTrees = [...allTrees];
-            updateAlbumGrid();
-            updateSpeciesFilter();
-        },
-        error: function(error) {
-            console.error('Error al parsear CSV:', error);
-            showErrorMessage('Error al procesar los datos del archivo CSV.');
-        }
-    });
 }
 
 // Configurar event listeners
@@ -156,9 +201,9 @@ function updateAlbumGrid() {
         const treeCard = document.createElement('div');
         treeCard.className = 'tree-card';
         
-        // Usar la primera imagen disponible o una imagen por defecto
+        // Usar la primera imagen disponible
         const imageUrl = tree.images && tree.images.length > 0 ? 
-            tree.images[0] : 'images/default-tree.jpg';
+            tree.images[0] : '';
         
         treeCard.innerHTML = `
             <div class="tree-image-container">
