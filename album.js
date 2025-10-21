@@ -89,11 +89,6 @@ function loadTreeData() {
                     console.error('Error al parsear CSV:', error);
                     showErrorMessage('Error al procesar los datos del archivo CSV.');
                 }
-                },
-                error: function(error) {
-                    console.error('Error al parsear CSV:', error);
-                    showErrorMessage('Error al procesar los datos del archivo CSV.');
-                }
             });
         })
         .catch(error => {
