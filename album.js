@@ -845,14 +845,14 @@ function updateAlbumGrid() {
         const treeCard = document.createElement('div');
         treeCard.className = 'tree-card';
         
-        // Usar la primera imagen disponible
-        const imageUrl = tree.images && tree.images.length > 0 ? 
-            tree.images[0] : '';
+        // Usar la primera imagen disponible o una imagen por defecto
+        const hasImages = tree.images && tree.images.length > 0;
+        const imageUrl = hasImages ? tree.images[0] : '';
         
         treeCard.innerHTML = `
             <div class="tree-image-container">
                 <img src="${imageUrl}" alt="${tree.ID}" class="tree-image" 
-                     onerror="this.src='images/default-tree.jpg'"
+                     onerror="this.onerror=null; this.src='logo.png'"
                      data-tree-id="${tree.ID}">
             </div>
             <div class="tree-info">
