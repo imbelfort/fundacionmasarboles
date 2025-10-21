@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Álbum de Árboles - Fundación + Árboles Bolivia</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌳</text></svg>">
+    <link rel="stylesheet" href="album.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Álbum de Árboles</h1>
+            <a href="index.html" class="back-link">← Volver al Mapa</a>
+        </header>
+        
+        <div class="filters">
+            <input type="text" id="album-search" placeholder="🔍 Buscar por código o nombre...">
+            <select id="album-species-filter">
+                <option value="">Todas las especies</option>
+            </select>
+        </div>
+        
+        <div id="album-grid" class="album-grid">
+            <!-- Los árboles se cargarán aquí dinámicamente -->
+        </div>
+        
+        <div id="image-modal" class="modal">
+            <span class="close">&times;</span>
+            <div class="modal-content">
+                <img id="modal-image" src="" alt="Árbol">
+                <div class="image-info">
+                    <h3 id="modal-title"></h3>
+                    <p id="modal-species"></p>
+                    <p id="modal-id"></p>
+                </div>
+                <div class="image-navigation">
+                    <button id="prev-image">Anterior</button>
+                    <span id="image-counter"></span>
+                    <button id="next-image">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="album.js"></script>
+</body>
+</html>
