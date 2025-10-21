@@ -206,79 +206,88 @@ function getTreeImages(treeId) {
     return images;
 }
 
-// Crear contenido del popup
+// Función para crear el contenido del popup del árbol de manera optimizada
 function createTreePopup(tree) {
+    // 1. Lógica de Estado y Datos
+    const treeID = tree.ID || 'N/A';
+    const treeName = tree.NOMBRE || 'Árbol Desconocido';
     const isSponsored = tree.PADRINO && tree.PADRINO.trim() !== '';
-    const images = getTreeImages(tree.ID);
-    
-    // Generar miniaturas
-    const thumbnails = images.map((img, index) => `
-        <div class="gallery-thumbnail ${index === 0 ? 'active' : ''}" 
-             onclick="showGalleryImage(this, '${img.path}', '${tree.ID}')">
-            <img src="${img.path}" 
-                 alt="${img.alt}"
-                 onerror="this.parentNode.style.display='none';">
-        </div>
-    `).join('');
-    
+    const images = getTreeImages(treeID) || [];
     const mainImage = images[0];
-    
+
+    // 2. Generar Galería (Miniaturas y Controles)
+    const thumbnailsHTML = images.map((img, index) => `
+        <button class="gallery-thumbnail ${index === 0 ? 'active' : ''}" 
+                title="${img.alt || 'Vista del árbol'}"
+                onclick="showGalleryImage(this, '${img.path}', '${treeID}')">
+            <img src="${img.path}" alt="${img.alt || 'Miniatura del árbol'}" 
+                 onerror="this.closest('.gallery-thumbnail').classList.add('hidden');">
+        </button>
+    `).join('');
+
+    const galleryControlsHTML = images.length > 1 ? `
+        <div class="gallery-nav">
+            <button class="gallery-nav-btn prev" title="Anterior" 
+                    onclick="navigateGallery(this.closest('.tree-gallery'), -1)">❮</button>
+            <button class="gallery-nav-btn next" title="Siguiente" 
+                    onclick="navigateGallery(this.closest('.tree-gallery'), 1)">❯</button>
+        </div>` : '';
+
+    // 3. Generar Contenido HTML del Popup
     return `
-        <div class="custom-popup">
-            <h3>🌳 ${tree.NOMBRE || 'Árbol'}</h3>
+        <div class="custom-popup" data-tree-id="${treeID}">
+            
+            <header class="popup-header">
+                <h3 class="tree-name">${treeName}</h3>
+                <span class="tree-id">ID: ${treeID}</span>
+                <span class="status-badge ${isSponsored ? 'sponsored' : 'unsponsored'}">
+                    ${isSponsored ? '✅ Padrinado' : 'Sin Padrino'}
+                </span>
+            </header>
+            
             <div class="tree-gallery">
                 <div class="gallery-container">
-                    <img src="${mainImage.path}" 
-                         alt="${mainImage.alt}" 
+                    <img src="${mainImage?.path || ''}" 
+                         alt="${mainImage?.alt || 'Imagen principal del árbol'}" 
                          class="gallery-main-image"
-                         onclick="openImageModal('${mainImage.path}', '${tree.ID}')"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <div class="gallery-placeholder" style="display: none;">
-                        <svg width="100%" height="150" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                         onclick="openImageModal('${mainImage?.path || ''}', '${treeID}')"
+                         onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+                    
+                    <div class="gallery-placeholder ${mainImage ? 'hidden' : ''}">
+                        <svg viewBox="0 0 100 100" class="placeholder-icon">
                             <rect width="100" height="100" fill="#f0f0f0" stroke="#ddd" stroke-width="2"/>
                             <path d="M30 40L50 20L70 40L80 30V80H20V30L30 40Z" fill="#4CAF50"/>
                             <circle cx="50" cy="35" r="8" fill="#2E7D32"/>
                             <text x="50" y="90" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">Sin imagen</text>
                         </svg>
                     </div>
-                    ${images.length > 1 ? `
-                    <div class="gallery-nav">
-                        <button class="gallery-nav-btn prev" onclick="navigateGallery(this.closest('.tree-gallery'), -1)">❮</button>
-                        <button class="gallery-nav-btn next" onclick="navigateGallery(this.closest('.tree-gallery'), 1)">❯</button>
-                    </div>` : ''}
+                    
+                    ${galleryControlsHTML}
                 </div>
-                ${images.length > 1 ? `
-                <div class="gallery-thumbnails">
-                    ${thumbnails}
-                </div>` : ''}
+                
+                ${images.length > 1 ? `<div class="gallery-thumbnails">${thumbnailsHTML}</div>` : ''}
             </div>
+            
+            <div class="tree-details grid-details">
+                <div class="detail-item"><strong><span class="icon-map">📍</span> Faja:</strong> ${tree.FAJA || 'N/A'}</div>
+                <div class="detail-item"><strong><span class="icon-number">#</span> Número:</strong> ${tree.NRO || 'N/A'}</div>
+                <div class="detail-item"><strong><span class="icon-trunk">📏</span> Tronco(cm):</strong> ${tree.CAP || 'N/A'} cm</div>
+                <div class="detail-item"><strong><span class="icon-height">⛰️</span> Altura:</strong> ${tree.HT || 'N/A'} m</div>
+                ${isSponsored ? `<div class="detail-item full-width"><strong><span class="icon-sponsor">🧑‍🤝‍🧑</span> Padrino:</strong> ${tree.PADRINO}</div>` : ''}
             </div>
-            <div class="tree-details">
-                <p><strong>ID:</strong> ${tree.ID}</p>
-                <p><strong>Especie:</strong> ${tree.NOMBRE}</p>
-                <p><strong>Faja:</strong> ${tree.FAJA}</p>
-                <p><strong>Número:</strong> ${tree.NRO}</p>
-                <p><strong>Tronco(cm):</strong> ${tree.CAP} cm</p>
-                <p><strong>Altura:</strong> ${tree.HT} m</p>
-                <p><strong>Estado:</strong> ${isSponsored ? '✅ Padrinado' : 'Sin Padrino'}</p>
-                ${isSponsored ? `<p><strong>Padrino:</strong> ${tree.PADRINO}</p>` : ''}
-            </div>
-            ${!isSponsored ? `
-                <div style="margin-top: 15px; text-align: center;">
-                    <button onclick="showSponsorQR('${tree.ID}', '${tree.NOMBRE}')" 
-                            style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+            
+            <footer class="popup-footer">
+                ${!isSponsored ? `
+                    <button class="btn-sponsor" 
+                            onclick="showSponsorQR('${treeID}', '${treeName}')" 
+                            title="Haz clic para obtener el código QR de apadrinamiento">
                         🌳 Padrinar este árbol
                     </button>
-                </div>
-            ` : `
-                <div style="margin-top: 15px; text-align: center; color: #4CAF50; font-weight: bold;">
-                    ✅ Este árbol ya tiene padrino
-                </div>
-            `}
+                ` : ''}
+            </footer>
         </div>
     `;
 }
-
 
 // Actualizar estadísticas
 function updateStatistics() {
