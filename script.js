@@ -503,7 +503,7 @@ function generateStaticQR(treeId, treeName) {
 
 // Enviar comprobante por WhatsApp
 function sendToWhatsApp(treeId, treeName) {
-    const phoneNumber = '59160851148'; // Reemplaza con tu número de WhatsApp
+    const phoneNumber = '59178914586'; // Reemplaza con tu número de WhatsApp
     const message = `Hola! He realizado el pago para padrinar el árbol ${treeId} (${treeName}). Adjunto el comprobante de pago.`;
     
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
